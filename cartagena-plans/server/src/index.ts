@@ -1,12 +1,12 @@
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
-import { schema } from './schema/graphql'
+import { typeDefs, resolvers } from './graphql'
 
 const app = express()
 const port = 9000
 
 async function startApolloServer() {
-  const apolloServer = new ApolloServer({ schema })
+  const apolloServer = new ApolloServer({ typeDefs, resolvers })
 
   await apolloServer.start()
 
@@ -17,6 +17,6 @@ startApolloServer()
 
 app.listen(port, () =>
   console.log(
-    `🚀 App listening on port ${port}! Visit http://localhost:${port} to see the app.`
+    `🚀 App listening on port ${port}! Visit http://localhost:${port} to see the app.\nVisit http://localhost:${port}/graphql to access the GraphQL Playground.`
   )
 )
