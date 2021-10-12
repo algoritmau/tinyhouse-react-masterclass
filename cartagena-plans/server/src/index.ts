@@ -1,23 +1,19 @@
 import express from 'express'
-import { plans } from './plans'
+import { ApolloServer } from 'apollo-server-express'
+import { schema } from './schema/graphql'
 
 const app = express()
 const port = 9000
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+async function startApolloServer() {
+  const apolloServer = new ApolloServer({ schema })
 
-// Plans route
-app.get('/plans', (_, res) => res.send(plans))
+  await apolloServer.start()
 
-// Delete plan route
-app.post('/delete-plan', (req, res) => {
-  const planId: number = req.body.id
+  apolloServer.applyMiddleware({ app, path: '/graphql' })
+}
 
-  for (let i = 0; i < plans.length; i++) {
-    if (plans[i].id === planId) return res.send(plans.splice(i, 1))
-  }
-})
+startApolloServer()
 
 app.listen(port, () =>
   console.log(
