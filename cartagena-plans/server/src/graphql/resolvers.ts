@@ -1,22 +1,37 @@
 import { IResolvers } from '@graphql-tools/utils'
-import { plans } from './plans'
+
+import { Database, Plan } from '../lib/types'
+import { ObjectId } from 'mongodb'
 
 export const resolvers: IResolvers = {
   Query: {
-    plans: () => {
-      return plans
+    plans: async (
+      _root: undefined,
+      _args: unknown,
+      { db }: { db: Database }
+    ): Promise<Plan[]> => {
+      return await db.plans.find({}).toArray()
     }
   },
 
   Mutation: {
-    deletePlan: (_root: undefined, { id }: { id: string }) => {
-      for (let i = 0; i < plans.length; i++) {
-        if (plans[i].id === id) {
-          return plans.splice(i, 1)[0]
-        }
-      }
+    deletePlan: async (
+      _root: undefined,
+      { id }: { id: string },
+      { db }: { db: Database }
+    ): Promise<Plan> => {
+      const deletedPlan = await db.plans.findOneAndDelete({
+        _id: new ObjectId(id)
+      })
 
-      throw new Error('Plan not found')
+      if (!deletedPlan.value)
+        throw new Error('Failed to delete plan. Plan not found')
+
+      return deletedPlan.value
     }
+  },
+
+  Plan: {
+    id: (plan: Plan): string => plan._id.toString()
   }
 }

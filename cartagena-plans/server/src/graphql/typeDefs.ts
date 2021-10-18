@@ -5,10 +5,10 @@ export const typeDefs = gql`
     id: ID!
     title: String!
     description: String!
-    image: String!
     features: [String!]!
     price: Int!
     duration: Int!
+    imageUrl: String!
     rating: Int!
   }
 
