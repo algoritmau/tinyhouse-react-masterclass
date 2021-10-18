@@ -1,16 +1,31 @@
+import * as dotenv from 'dotenv'
+dotenv.config({ path: __dirname + '/.env' })
+
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { typeDefs, resolvers } from './graphql'
+import { connectDatabase } from './database'
 
 const app = express()
 const port = 9000
 
 async function startApolloServer() {
-  const apolloServer = new ApolloServer({ typeDefs, resolvers })
+  const db = await connectDatabase()
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: () => ({ db })
+  })
 
-  await apolloServer.start()
+  await server.start()
 
-  apolloServer.applyMiddleware({ app, path: '/graphql' })
+  server.applyMiddleware({ app, path: '/graphql' })
+
+  const plan1 = await db.plans.findOne({
+    title: 'Islas del Rosario Catamaran Tour'
+  })
+
+  console.log(plan1)
 }
 
 startApolloServer()
