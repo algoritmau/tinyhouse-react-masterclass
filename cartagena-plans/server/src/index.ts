@@ -20,12 +20,6 @@ async function startApolloServer() {
   await server.start()
 
   server.applyMiddleware({ app, path: '/graphql' })
-
-  const plan1 = await db.plans.findOne({
-    title: 'Islas del Rosario Catamaran Tour'
-  })
-
-  console.log(plan1)
 }
 
 startApolloServer()
