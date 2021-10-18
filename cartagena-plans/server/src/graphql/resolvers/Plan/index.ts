@@ -1,9 +1,9 @@
 import { IResolvers } from '@graphql-tools/utils'
 
-import { Database, Plan } from '../lib/types'
+import { Database, Plan } from 'types'
 import { ObjectId } from 'mongodb'
 
-export const resolvers: IResolvers = {
+export const planResolvers: IResolvers = {
   Query: {
     plans: async (
       _root: undefined,
