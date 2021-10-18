@@ -1,14 +1,14 @@
-import { Collection, Double, ObjectId } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 
 export interface Plan {
   _id: ObjectId
   title: string
   description: string
-  image: string
   features: string[]
   price: number
-  duration: string
-  rating: Double
+  duration: number
+  imageUrl: string
+  rating: number
 }
 
 export interface Database {
