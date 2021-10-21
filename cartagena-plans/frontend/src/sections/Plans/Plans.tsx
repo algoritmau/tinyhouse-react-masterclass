@@ -1,8 +1,8 @@
 import { server } from '../../lib/api'
-import { PlansData } from './types'
+import { DeletePlanData, DeletePlanVariables, PlansData } from './types'
 
 const PLANS_QUERY = `
-  query {
+  query PLANS_QUERY{
     plans {
       id
       title
@@ -12,6 +12,14 @@ const PLANS_QUERY = `
       duration
       imageUrl
       rating
+    }
+  }
+`
+
+const DELETE_PLAN_MUTATION = `
+  mutation DELETE_PLAN_MUTATION($id: ID!) {
+    deletePlan(id: $id) {
+      id
     }
   }
 `
@@ -27,10 +35,20 @@ export const Plans = ({ title }: Props) => {
     console.log(data.plans)
   }
 
+  const deletePlan = async () => {
+    const { data } = await server.fetch<DeletePlanData, DeletePlanVariables>({
+      query: DELETE_PLAN_MUTATION,
+      variables: { id: '61718931777e269cb6382ec6' }
+    })
+
+    console.log(data.deletePlan.id)
+  }
+
   return (
     <div>
       <h2>{title}</h2>
       <button onClick={getPlans}>Ver Planes</button>
+      <button onClick={deletePlan}>Eliminar Plan</button>
     </div>
   )
 }

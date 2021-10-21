@@ -12,3 +12,11 @@ interface Plan {
 export interface PlansData {
   plans: Plan[]
 }
+
+export interface DeletePlanData {
+  deletePlan: Plan
+}
+
+export interface DeletePlanVariables {
+  id: string
+}
