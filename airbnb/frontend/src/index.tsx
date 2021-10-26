@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import reportWebVitals from './reportWebVitals'
-import { Plans } from './sections'
+import { Listings } from './sections'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Plans title="Cartagena Plans" />
+    <Listings name="Listings" />
   </React.StrictMode>,
   document.getElementById('root')
 )

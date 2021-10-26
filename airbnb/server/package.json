@@ -1,13 +1,13 @@
 {
-  "name": "cartagena-plans-server",
+  "name": "airbnb-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "dev": "nodemon -r dotenv/config src/index.ts dotenv_config_path=src/.env",
     "build": "tsc -p ./"
   },
-  "author": "",
+  "author": "Mauricio Paternina",
   "license": "ISC",
   "dependencies": {
     "@graphql-tools/utils": "^8.2.5",

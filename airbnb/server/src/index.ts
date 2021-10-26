@@ -1,11 +1,10 @@
-import * as dotenv from 'dotenv'
-dotenv.config({ path: __dirname + '/.env' })
+import { config } from 'dotenv'
+config()
 
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { typeDefs, resolvers } from './graphql'
 import { connectDatabase } from './database'
-// import { seedDatabase } from './temp/seed'
 
 const app = express()
 const port = 9000
@@ -21,8 +20,6 @@ async function startApolloServer() {
   await server.start()
 
   server.applyMiddleware({ app, path: '/graphql' })
-
-  // seedDatabase()
 }
 
 startApolloServer()
