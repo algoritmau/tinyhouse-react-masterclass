@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { server } from 'lib/api'
+import { useQuery } from 'lib/hooks'
 import {
   DeleteListingData,
   DeleteListingVariables,
-  Listing,
   ListingsData
 } from './types'
 
@@ -32,12 +31,7 @@ interface Props {
 }
 
 export const Listings = ({ name }: Props) => {
-  const [listings, setListings] = useState<Listing[] | null>(null)
-  const getListings = async () => {
-    const { data } = await server.fetch<ListingsData>({ query: QUERY_LISTINGS })
-
-    setListings(data.listings.slice(0, 10)) // TODO: add useMemo to prevent re-fetching
-  }
+  const { data, refetch } = useQuery<ListingsData>(QUERY_LISTINGS)
 
   const deleteListing = async (id: string) => {
     await server.fetch<DeleteListingData, DeleteListingVariables>({
@@ -45,13 +39,15 @@ export const Listings = ({ name }: Props) => {
       variables: { id }
     })
 
-    getListings()
+    refetch()
   }
+
+  const listings = data?.listings || null
 
   return (
     <div>
       <h2>{name}</h2>
-      <button onClick={getListings}>View Listings</button>
+      {!listings && <p>Loading...</p>}
       <ul>
         {listings &&
           listings.map((listing) => (
