@@ -1,7 +1,9 @@
-import { server } from '../../lib/api'
+import { useState } from 'react'
+import { server } from 'lib/api'
 import {
   DeleteListingData,
   DeleteListingVariables,
+  Listing,
   ListingsData
 } from './types'
 
@@ -30,29 +32,37 @@ interface Props {
 }
 
 export const Listings = ({ name }: Props) => {
+  const [listings, setListings] = useState<Listing[] | null>(null)
   const getListings = async () => {
     const { data } = await server.fetch<ListingsData>({ query: QUERY_LISTINGS })
 
-    console.log(data.listings)
+    setListings(data.listings.slice(0, 10)) // TODO: add useMemo to prevent re-fetching
   }
 
-  const deleteListing = async () => {
-    const { data } = await server.fetch<
-      DeleteListingData,
-      DeleteListingVariables
-    >({
+  const deleteListing = async (id: string) => {
+    await server.fetch<DeleteListingData, DeleteListingVariables>({
       query: MUTATION_DELETE_LISTING,
-      variables: { id: '10115921' }
+      variables: { id }
     })
 
-    console.log(data.deleteListing.id)
+    getListings()
   }
 
   return (
     <div>
       <h2>{name}</h2>
       <button onClick={getListings}>View Listings</button>
-      <button onClick={deleteListing}>Delete Listing</button>
+      <ul>
+        {listings &&
+          listings.map((listing) => (
+            <li key={listing.id}>
+              <span>{listing.name}</span>
+              <button onClick={() => deleteListing(listing.id)}>
+                Delete Listing
+              </button>
+            </li>
+          ))}
+      </ul>
     </div>
   )
 }
