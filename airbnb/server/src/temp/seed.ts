@@ -1,7 +1,3 @@
-// import * as dotenv from 'dotenv'
-// dotenv.config({ path: __dirname + '../src/.env' })
-
-import { ObjectId } from 'mongodb'
 import { connectDatabase } from '../database'
 import { Listing } from '../lib/types'
 
@@ -11,7 +7,7 @@ export const seedDatabase = async () => {
     const db = await connectDatabase()
     const listings: Listing[] = [
       {
-        _id: new ObjectId(),
+        _id: 'id',
         listing_url: 'Text',
         name: 'Text',
         summary: 'Text',
@@ -110,7 +106,7 @@ export const seedDatabase = async () => {
         },
         reviews: [
           {
-            _id: new ObjectId(),
+            _id: 'id',
             date: 'Date',
             listing_id: '10006546',
             reviewer_id: '51483096',
