@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import { server } from 'lib/api'
+import { Action } from './types'
 
 interface State<TData> {
   data: TData | null
@@ -11,17 +12,42 @@ type MutationHook<TData, TVariables> = [
   (variables?: TVariables | undefined) => Promise<void>,
   State<TData>
 ]
-/**
- * Hook for using GraphQL mutations.
- * @param query GraphQL mutation query.
- * @param TData The shape of data that can be returned from the mutation.
- * @param TVariables The shape of variables the mutation accepts.
- * @return [state, mutate]
- */
+
+const reducer =
+  <TData>() =>
+  (state: State<TData>, action: Action<TData>): State<TData> => {
+    switch (action.type) {
+      case 'SET_DATA':
+        return {
+          ...state,
+          loading: true
+        }
+
+      case 'SET_DATA_SUCCESS':
+        return {
+          data: action.payload,
+          loading: false,
+          error: false
+        }
+
+      case 'SET_DATA_ERROR':
+        return {
+          ...state,
+          loading: false,
+          error: true
+        }
+
+      default:
+        throw new Error()
+    }
+  }
+
 export const useMutation = <TData = any, TVariables = any>(
   query: string
 ): MutationHook<TData, TVariables> => {
-  const [state, setState] = useState<State<TData>>({
+  const getReducer = reducer<TData>()
+
+  const [state, dispatch] = useReducer(getReducer, {
     data: null,
     loading: false,
     error: false
@@ -29,11 +55,7 @@ export const useMutation = <TData = any, TVariables = any>(
 
   const mutate = async (variables?: TVariables) => {
     try {
-      setState({
-        data: null,
-        loading: true,
-        error: false
-      })
+      dispatch({ type: 'SET_DATA' })
 
       const { data, errors } = await server.fetch<TData, TVariables>({
         query,
@@ -42,17 +64,9 @@ export const useMutation = <TData = any, TVariables = any>(
 
       if (errors) throw new Error(errors[0].message)
 
-      setState({
-        data,
-        loading: false,
-        error: false
-      })
+      dispatch({ type: 'SET_DATA_SUCCESS', payload: data })
     } catch (error) {
-      setState({
-        data: null,
-        loading: false,
-        error: true
-      })
+      dispatch({ type: 'SET_DATA_ERROR' })
       throw console.error(error)
     }
   }

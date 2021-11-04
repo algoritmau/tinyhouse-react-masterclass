@@ -1,5 +1,6 @@
+import { useCallback, useEffect, useReducer } from 'react'
 import { server } from 'lib/api'
-import { useCallback, useEffect, useState } from 'react'
+import { Action } from './types'
 
 interface State<TData> {
   data: TData | null
@@ -11,8 +12,39 @@ interface QueryResult<TData> extends State<TData> {
   refetch: () => void
 }
 
+const reducer =
+  <TData>() =>
+  (state: State<TData>, action: Action<TData>): State<TData> => {
+    switch (action.type) {
+      case 'SET_DATA':
+        return {
+          ...state,
+          loading: true
+        }
+
+      case 'SET_DATA_SUCCESS':
+        return {
+          data: action.payload,
+          loading: false,
+          error: false
+        }
+
+      case 'SET_DATA_ERROR':
+        return {
+          ...state,
+          loading: false,
+          error: true
+        }
+
+      default:
+        throw new Error()
+    }
+  }
+
 export const useQuery = <TData = any>(query: string): QueryResult<TData> => {
-  const [state, setState] = useState<State<TData>>({
+  const getReducer = reducer<TData>()
+
+  const [state, dispatch] = useReducer(getReducer, {
     data: null,
     loading: false,
     error: false
@@ -22,15 +54,15 @@ export const useQuery = <TData = any>(query: string): QueryResult<TData> => {
   const setData = useCallback(() => {
     const fetchData = async () => {
       try {
-        setState({ data: null, loading: true, error: false })
+        dispatch({ type: 'SET_DATA' })
 
         const { data, errors } = await server.fetch<TData>({ query })
 
         if (errors && errors.length) throw new Error(errors[0].message)
 
-        setState({ data, loading: false, error: false })
+        dispatch({ type: 'SET_DATA_SUCCESS', payload: data })
       } catch (error) {
-        setState({ data: null, loading: false, error: true })
+        dispatch({ type: 'SET_DATA_ERROR' })
         throw console.error(error)
       }
     }
