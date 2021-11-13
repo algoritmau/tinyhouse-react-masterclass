@@ -1,16 +1,27 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import reportWebVitals from './reportWebVitals'
-import { Listings } from './sections'
+
+import ApolloClient from 'apollo-boost'
+import { ApolloProvider } from 'react-apollo'
+
+import './styles/globals.sass'
+import './styles/styles.sass'
+
+import { Layout } from 'components/Layout'
+import { Header } from 'components/Header'
+import { Footer } from 'components/Footer'
+
+const client = new ApolloClient({
+  uri: '/graphql'
+})
 
 ReactDOM.render(
   <React.StrictMode>
-    <Listings name="Listings" />
+    <ApolloProvider client={client}>
+      <Header />
+      <Layout />
+      <Footer />
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()

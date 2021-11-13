@@ -1,0 +1,14 @@
+@mixin flex-centered
+  display: flex
+  justify-content: center
+  align-items: center
+
+@mixin flex-space-between
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+@mixin responsiveness($breakpoint)
+  @if $breakpoint == tablet-medium
+    @media screen and (min-width: 768px)
+      @content
