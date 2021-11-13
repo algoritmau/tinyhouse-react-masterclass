@@ -1,4 +1,13 @@
-export interface Listing {
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: Listings
+// ====================================================
+
+export interface Listings_listings {
+  __typename: 'Listing'
   id: string
   listing_url: string
   name: string
@@ -84,14 +93,6 @@ interface Review {
   comments: string
 }
 
-export interface ListingsData {
-  listings: Listing[]
-}
-
-export interface DeleteListingData {
-  deleteListing: Listing
-}
-
-export interface DeleteListingVariables {
-  id: string
+export interface Listings {
+  listings: Listings_listings[]
 }

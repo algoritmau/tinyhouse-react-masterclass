@@ -9,7 +9,7 @@ export const listingResolvers: IResolvers = {
       _args: unknown,
       { db }: { db: Database }
     ): Promise<Listing[]> => {
-      return await db.listingsAndReview.find({}).toArray()
+      return await db.listingsAndReview.find({}).limit(10).toArray()
     }
   },
 

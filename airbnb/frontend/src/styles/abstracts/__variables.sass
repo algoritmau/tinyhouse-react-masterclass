@@ -1,0 +1,19 @@
+@use "sass:meta"
+@import url("https://use.typekit.net/hon2tsh.css")
+
+$typeface: proxima-soft, sans-serif
+
+$color-background: #fefefe
+$color-foreground: #292929
+$color-accent: #E74B3B
+
+$max-width: 1024px
+
+:root
+  --typeface: #{meta.inspect($typeface)}
+
+  --color-background: #{meta.inspect($color-background)}
+  --color-foreground: #{meta.inspect($color-foreground)}
+  --color-accent: #{meta.inspect($color-accent)}
+
+  --max-width: #{meta.inspect($max-width)}
