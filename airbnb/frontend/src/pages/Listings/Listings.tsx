@@ -38,11 +38,7 @@ const MUTATION_DELETE_LISTING = gql`
   }
 `
 
-interface Props {
-  name: string
-}
-
-export const Listings = ({ name }: Props) => {
+export const Listings = () => {
   const { data, error, loading, refetch } =
     useQuery<ListingsData>(QUERY_LISTINGS)
 
@@ -63,7 +59,7 @@ export const Listings = ({ name }: Props) => {
   return (
     <main className="main">
       <h1 className="main__title" tabIndex={0}>
-        {name}
+        Listings
       </h1>
       {error && <div>Something went wrong. Please try again later.</div>}
       {deleteListingError && (
