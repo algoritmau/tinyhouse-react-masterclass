@@ -23,14 +23,14 @@ export const typeDefs = gql`
     last_scraped: String!
     calendar_last_scraped: String!
     first_review: String!
-    last_review: String!
+    last_review: String
     accommodates: Int!
     bedrooms: Int!
     beds: Int!
     number_of_reviews: Int!
     bathrooms: Int!
     amenities: [String!]!
-    price: Int!
+    price: Float!
     security_deposit: Int!
     cleaning_fee: Int!
     extra_people: Int!
@@ -39,7 +39,7 @@ export const typeDefs = gql`
     host: Host!
     address: Address!
     availability: Availability!
-    review_scores: ReviewScores!
+    review_scores: ReviewScores
     reviews: [Review!]!
   }
 
@@ -93,13 +93,13 @@ export const typeDefs = gql`
   }
 
   type ReviewScores {
-    review_scores_accuracy: Int!
-    review_scores_cleanliness: Int!
-    review_scores_checkin: Int!
-    review_scores_communication: Int!
-    review_scores_location: Int!
-    review_scores_value: Int!
-    review_scores_rating: Int!
+    review_scores_accuracy: Int
+    review_scores_cleanliness: Int
+    review_scores_checkin: Int
+    review_scores_communication: Int
+    review_scores_location: Int
+    review_scores_value: Int
+    review_scores_rating: Int
   }
 
   type Review {

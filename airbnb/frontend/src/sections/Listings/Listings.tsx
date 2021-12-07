@@ -5,14 +5,26 @@ import {
   DeleteListing as DeleteListingData,
   DeleteListingVariables
 } from './__generated__/DeleteListing'
+import { ListingCard } from 'components/ListingCard'
 
 const QUERY_LISTINGS = gql`
   query QUERY_LISTINGS {
     listings {
       id
       name
-      description
-      amenities
+      summary
+      room_type
+      images {
+        picture_url
+      }
+      address {
+        country
+        market
+      }
+      number_of_reviews
+      review_scores {
+        review_scores_rating
+      }
     }
   }
 `
@@ -50,21 +62,33 @@ export const Listings = ({ name }: Props) => {
 
   return (
     <main className="main">
-      <h1 className="main__title">{name}</h1>
+      <h1 className="main__title" tabIndex={0}>
+        {name}
+      </h1>
       {error && <div>Something went wrong. Please try again later.</div>}
       {deleteListingError && (
         <div>Something went wrong. Please try again later.</div>
       )}
       {loading && <p>Loading...</p>}
       {deleteListingLoading && <p>Deleting listing...</p>}
-      <ul>
+      <ul className="listing-cards">
         {listings &&
           listings.map((listing) => (
-            <li key={listing.id}>
-              <span>{listing.name}</span>
+            <li key={listing.id} className="listing-card-item">
+              <ListingCard
+                title={listing.name}
+                description={listing.summary}
+                roomType={listing.room_type}
+                imageUri={listing.images.picture_url}
+                city={listing.address.market}
+                reviewsCount={listing.number_of_reviews}
+                reviewsAverage={listing.review_scores?.review_scores_rating}
+                price={listing.price}
+              />
+              {/* <span>{listing.name}</span>
               <button onClick={() => handleDeleteListing(listing.id)}>
                 Delete Listing
-              </button>
+              </button> */}
             </li>
           ))}
       </ul>
